@@ -1,0 +1,1533 @@
+{
+    "log": {
+        "access": "/var/lib/marzban/assets/access.log",
+        "error": "/var/lib/marzban/assets/error.log",
+        "loglevel": "warning"
+    },
+    "dns": {
+        "servers": [
+            "1.1.1.1",
+            "1.0.0.1",
+            "8.8.8.8",
+            "8.8.4.4",
+            "127.0.0.1"
+        ],
+        "tag": "dns-in"
+    },
+    "routing": {
+        "domainStrategy": "IPIfNonMatch",
+        "rules": [
+            {
+                "type": "field",
+                "ip": ["127.0.0.1/32"],
+                "outboundTag": "direct"
+            },
+            {
+                "type": "field",
+                "protocol": [
+                    "bittorent"
+                ],
+                "outboundTag": "block"
+            },
+            {
+                "type": "field",
+                "inboundTag": [
+                    "dns-in"
+                ],
+                "outboundTag": "dns-out"
+            },
+            {
+                "type": "field",
+                "network": "tcp,udp",
+                "domain": [
+                    "geosite:cn",
+                    "geosite:private",
+                    "geoip:private",
+                    "geoip:cn"
+                ],
+                "outboundTag": "direct"
+            },
+            {
+                "inboundTag": [
+                    "TROJAN_WS_ANTIPORN",
+                    "VMESS_WS_ANTIPORN",
+                    "VLESS_WS_ANTIPORN",
+                    "SHADOWSOCKS_WS_ANTIPORN",
+                    "TROJAN_HU_ANTIPORN",
+                    "VMESS_HU_ANTIPORN",
+                    "VLESS_HU_ANTIPORN",
+                    "TROJAN_XHTTP_ANTIPORN",
+                    "VMESS_XHTTP_ANTIPORN",
+                    "VLESS_XHTTP_ANTIPORN"
+                ],
+                "type": "field",
+                "outboundTag": "block",
+                "domain": [
+                    "ext:geositeindo.dat:oisd-nsfw"
+                ]
+            },
+            {
+                "inboundTag": [
+                    "TROJAN_WS_ANTIADS",
+                    "VMESS_WS_ANTIADS",
+                    "VLESS_WS_ANTIADS",
+                    "SHADOWSOCKS_WS_ANTIADS",
+                    "TROJAN_WS_ANTIPORN",
+                    "VMESS_WS_ANTIPORN",
+                    "VLESS_WS_ANTIPORN",
+                    "SHADOWSOCKS_WS_ANTIPORN",
+                    "TROJAN_HU_ANTIADS",
+                    "VMESS_HU_ANTIADS",
+                    "VLESS_HU_ANTIADS",
+                    "TROJAN_HU_ANTIPORN",
+                    "VMESS_HU_ANTIPORN",
+                    "VLESS_HU_ANTIPORN",
+                    "TROjan_XHTTP_ANTIADS",
+                    "VMESS_XHTTP_ANTIADS",
+                    "VLESS_XHTTP_ANTIADS",
+                    "TROJAN_XHTTP_ANTIPORN",
+                    "VMESS_XHTTP_ANTIPORN",
+                    "VLESS_XHTTP_ANTIPORN"
+                ],
+                "type": "field",
+                "outboundTag": "block",
+                "domain": [
+                    "ext:geositeindo.dat:oisd-full",
+                    "ext:geositeindo.dat:rule-ads"
+                ]
+            },
+            {
+                "type": "field",
+                "network": "tcp,udp",
+                "domain": [
+                    "domain:ipinfo.io",
+                    "domain:icanhazip.com",
+                    "domain:ipaddress.my",
+                    "domain:2ip.io",
+                    "domain:ifconfig.io",
+                    "domain:whatismyisp.com"
+                ],
+                "outboundTag": "warp-IPv4"
+            },
+            {
+                "type": "field",
+                "network": "tcp,udp",
+                "domain": [
+                    "geosite:netflix",
+                    "geosite:openai"
+                ],
+                "outboundTag": "warp-IPv6"
+            },
+            {
+                "type": "field",
+                "network": "tcp,udp",
+                "outboundTag": "direct"
+            }
+        ]
+    },
+    "inbounds": [
+        {
+            "tag": "VLESS_REALITY_FALLBACK",
+            "listen": "0.0.0.0",
+            "port": "443, 8443, 2053, 2083, 2087, 2096",
+            "protocol": "vless",
+            "settings": {
+                "clients": [],
+                "decryption": "none",
+                "fallbacks": [
+                    {
+                        "dest": "8004",
+                        "xver": 1
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "reality",
+                "realitySettings": {
+                    "show": false,
+                    "dest": "17017",
+                    "xver": 0,
+                    "serverNames": [
+                        "static-web.prod.vidiocdn.com",
+                        "teams.microsoft.com",
+                        "sb.scorecardresearch.com",
+                        "www.spotify.com",
+                        "graph.instagram.com",
+                        "sogood.linefriends.com",
+                        "shopee.co.id",
+                        "payment.id.shopee.kr",
+                        "shopee.sg",
+                        "quiz.vidio.com",
+                        "zendesk1.garena.com",
+                        "www.sushiroll.co.id",
+                        "r.koubei.com",
+                        "pubgmobile.com"
+                    ],
+                    "privateKey": "jzbDp65QUPGm42dW9su86czG2sI34cArJngytoxlYF0",
+                    "shortIds": [
+                        "87ae7e1887f2bd1e"
+                    ]
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VLESS_REALITY_GRPC",
+            "listen": "127.0.0.1",
+            "port": 8004,
+            "protocol": "vless",
+            "settings": {
+                "clients": [],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "grpc",
+                "grpcSettings": {
+                    "serviceName": "vless-reality-grpc"
+                },
+                "sockopt": {
+                    "acceptProxyProtocol": true
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VLESS_TLS",
+            "port": 17017,
+            "protocol": "vless",
+            "settings": {
+                "decryption": "none",
+                "fallbacks": [
+                    {
+                        "dest": "1997",
+                        "xver": 2
+                    },
+                    {
+                        "alpn": "h2",
+                        "dest": "1998",
+                        "xver": 2
+                    },
+                    {
+                        "alpn": "h2",
+                        "dest": "@trojan-tcp",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/trojan-http",
+                        "dest": "@trojan-httpup",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vmess-http",
+                        "dest": "@vmess-httpup",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vless-http",
+                        "dest": "@vless-httpup",
+                        "xver": 2
+                    },
+                    {
+                        "alpn": "h2",
+                        "path": "/trojan-xhttp",
+                        "dest": "@trojan-xhttp",
+                        "xver": 2
+                    },
+                    {
+                        "alpn": "h2",
+                        "path": "/vmess-xhttp",
+                        "dest": "@vmess-xhttp",
+                        "xver": 2
+                    },
+                    {
+                        "alpn": "h2",
+                        "path": "/vless-xhttp",
+                        "dest": "@vless-xhttp",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/trojan-antiads",
+                        "dest": "@trojan-ws-antiads",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vmess-antiads",
+                        "dest": "@vmess-ws-antiads",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vless-antiads",
+                        "dest": "@vless-ws-antiads",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/shadowsocks-antiads",
+                        "dest": 6003,
+                        "xver": 2
+                    },
+                    {
+                        "path": "/trojan-hu-antiads",
+                        "dest": "@trojan-hu-antiads",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vmess-hu-antiads",
+                        "dest": "@vmess-hu-antiads",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vless-hu-antiads",
+                        "dest": "@vless-hu-antiads",
+                        "xver": 2
+                    },
+                    {
+                        "alpn": "h2",
+                        "path": "/trojan-xhttp-antiads",
+                        "dest": "@trojan-xhttp-antiads",
+                        "xver": 2
+                    },
+                    {
+                        "alpn": "h2",
+                        "path": "/vmess-xhttp-antiads",
+                        "dest": "@vmess-xhttp-antiads",
+                        "xver": 2
+                    },
+                    {
+                        "alpn": "h2",
+                        "path": "/vless-xhttp-antiads",
+                        "dest": "@vless-xhttp-antiads",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/trojan-antiporn",
+                        "dest": "@trojan-ws-antiporn",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vmess-antiporn",
+                        "dest": "@vmess-ws-antiporn",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vless-antiporn",
+                        "dest": "@vless-ws-antiporn",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/shadowsocks-antiporn",
+                        "dest": 6004,
+                        "xver": 2
+                    },
+                    {
+                        "path": "/trojan-hu-antiporn",
+                        "dest": "@trojan-hu-antiporn",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vmess-hu-antiporn",
+                        "dest": "@vmess-hu-antiporn",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vless-hu-antiporn",
+                        "dest": "@vless-hu-antiporn",
+                        "xver": 2
+                    },
+                    {
+                        "alpn": "h2",
+                        "path": "/trojan-xhttp-antiporn",
+                        "dest": "@trojan-xhttp-antiporn",
+                        "xver": 2
+                    },
+                    {
+                        "alpn": "h2",
+                        "path": "/vmess-xhttp-antiporn",
+                        "dest": "@vmess-xhttp-antiporn",
+                        "xver": 2
+                    },
+                    {
+                        "alpn": "h2",
+                        "path": "/vless-xhttp-antiporn",
+                        "dest": "@vless-xhttp-antiporn",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vmess-tcp",
+                        "dest": "@vmess-tcp",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/ss-tcp",
+                        "dest": "6003",
+                        "xver": 2
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "tls",
+                "tlsSettings": {
+                    "alpn": [
+                        "h2",
+                        "http/1.1"
+                    ],
+                    "minVersion": "1.2",
+                    "maxVersion": "1.3",
+                    "cipherSuites": "TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384:TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256:TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305_SHA256",
+                    "certificates": [
+                        {
+                            "ocspStapling": 3600,
+                            "certificateFile": "/var/lib/marzban/xray.crt",
+                            "keyFile": "/var/lib/marzban/xray.key",
+                            "usage": "encipherment"
+                        }
+                    ]
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "TROJAN_TCP",
+            "listen": "@trojan-tcp",
+            "protocol": "trojan",
+            "settings": {
+                "clients": [],
+                "fallbacks": [
+                    {
+                        "dest": "1998",
+                        "xver": 2
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "none",
+                "tcpSettings": {
+                    "acceptProxyProtocol": true
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "TROJAN_WS",
+            "listen": "127.0.0.1",
+            "port": 3002,
+            "protocol": "trojan",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "path": "/trojan"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "TROJAN_WS_ANTIADS",
+            "listen": "@trojan-ws-antiads",
+            "protocol": "trojan",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/trojan-antiads"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "TROJAN_WS_ANTIPORN",
+            "listen": "@trojan-ws-antiporn",
+            "protocol": "trojan",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/trojan-antiporn"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "TROJAN_GRPC",
+            "listen": "127.0.0.1",
+            "port": 2001,
+            "protocol": "trojan",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "grpc",
+                "grpcSettings": {
+                    "serviceName": "trojan-grpc",
+                    "acceptProxyProtocol": true,
+                    "multiMode": true
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "TROJAN_HTTPUPGRADE",
+            "listen": "@trojan-httpup",
+            "protocol": "trojan",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "httpupgrade",
+                "security": "none",
+                "httpupgradeSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/trojan-http"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "TROJAN_HU_ANTIADS",
+            "listen": "@trojan-hu-antiads",
+            "protocol": "trojan",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "httpupgrade",
+                "security": "none",
+                "httpupgradeSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/trojan-hu-antiads"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "TROJAN_HU_ANTIPORN",
+            "listen": "@trojan-hu-antiporn",
+            "protocol": "trojan",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "httpupgrade",
+                "security": "none",
+                "httpupgradeSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/trojan-hu-antiporn"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "TROJAN_XHTTP",
+            "listen": "@trojan-xhttp",
+            "protocol": "trojan",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "xhttp",
+                "security": "none",
+                "xhttpSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/trojan-xhttp"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "TROJAN_XHTTP_ANTIADS",
+            "listen": "@trojan-xhttp-antiads",
+            "protocol": "trojan",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "xhttp",
+                "security": "none",
+                "xhttpSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/trojan-xhttp-antiads"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "TROJAN_XHTTP_ANTIPORN",
+            "listen": "@trojan-xhttp-antiporn",
+            "protocol": "trojan",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "xhttp",
+                "security": "none",
+                "xhttpSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/trojan-xhttp-antiporn"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VMESS_TCP",
+            "listen": "@vmess-tcp",
+            "protocol": "vmess",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "none",
+                "tcpSettings": {
+                    "acceptProxyProtocol": true,
+                    "header": {
+                        "type": "http",
+                        "request": {
+                            "path": [
+                                "/vmess-tcp"
+                            ]
+                        }
+                    }
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VMESS_WS",
+            "listen": "127.0.0.1",
+            "port": 3001,
+            "protocol": "vmess",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "path": "/vmess"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VMESS_WS_ANTIADS",
+            "listen": "@vmess-ws-antiads",
+            "protocol": "vmess",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vmess-antiads"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VMESS_WS_ANTIPORN",
+            "listen": "@vmess-ws-antiporn",
+            "protocol": "vmess",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vmess-antiporn"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VMESS_GRPC",
+            "listen": "127.0.0.1",
+            "port": 4001,
+            "protocol": "vmess",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "grpc",
+                "security": "none",
+                "grpcSettings": {
+                    "acceptProxyProtocol": true,
+                    "serviceName": "vmess-grpc",
+                    "multiMode": true
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VMESS_HTTPUPGRADE",
+            "listen": "@vmess-httpup",
+            "protocol": "vmess",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "httpupgrade",
+                "security": "none",
+                "httpupgradeSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vmess-http"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VMESS_HU_ANTIADS",
+            "listen": "@vmess-hu-antiads",
+            "protocol": "vmess",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "httpupgrade",
+                "security": "none",
+                "httpupgradeSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vmess-hu-antiads"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VMESS_HU_ANTIPORN",
+            "listen": "@vmess-hu-antiporn",
+            "protocol": "vmess",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "httpupgrade",
+                "security": "none",
+                "httpupgradeSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vmess-hu-antiporn"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VMESS_XHTTP",
+            "listen": "@vmess-xhttp",
+            "protocol": "vmess",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "xhttp",
+                "security": "none",
+                "xhttpSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vmess-xhttp"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VMESS_XHTTP_ANTIADS",
+            "listen": "@vmess-xhttp-antiads",
+            "protocol": "vmess",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "xhttp",
+                "security": "none",
+                "xhttpSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vmess-xhttp-antiads"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VMESS_XHTTP_ANTIPORN",
+            "listen": "@vmess-xhttp-antiporn",
+            "protocol": "vmess",
+            "settings": {
+                "clients": []
+            },
+            "streamSettings": {
+                "network": "xhttp",
+                "security": "none",
+                "xhttpSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vmess-xhttp-antiporn"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VLESS_WS",
+            "listen": "127.0.0.1",
+            "port": 3003,
+            "protocol": "vless",
+            "settings": {
+                "clients": [],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "path": "/vless"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VLESS_WS_ANTIADS",
+            "listen": "@vless-ws-antiads",
+            "protocol": "vless",
+            "settings": {
+                "clients": [],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vless-antiads"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VLESS_WS_ANTIPORN",
+            "listen": "@vless-ws-antiporn",
+            "protocol": "vless",
+            "settings": {
+                "clients": [],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vless-antiporn"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VLESS_GRPC",
+            "listen": "127.0.0.1",
+            "port": 5001,
+            "protocol": "vless",
+            "settings": {
+                "clients": [],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "grpc",
+                "security": "none",
+                "grpcSettings": {
+                    "acceptProxyProtocol": true,
+                    "serviceName": "vless-grpc",
+                    "multiMode": true
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VLESS_HTTPUPGRADE",
+            "listen": "@vless-httpup",
+            "protocol": "vless",
+            "settings": {
+                "clients": [],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "httpupgrade",
+                "security": "none",
+                "httpupgradeSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vless-http"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VLESS_HU_ANTIADS",
+            "listen": "@vless-hu-antiads",
+            "protocol": "vless",
+            "settings": {
+                "clients": [],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "httpupgrade",
+                "security": "none",
+                "httpupgradeSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vless-hu-antiads"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VLESS_HU_ANTIPORN",
+            "listen": "@vless-hu-antiporn",
+            "protocol": "vless",
+            "settings": {
+                "clients": [],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "httpupgrade",
+                "security": "none",
+                "httpupgradeSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vless-hu-antiporn"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VLESS_XHTTP",
+            "listen": "@vless-xhttp",
+            "protocol": "vless",
+            "settings": {
+                "clients": [],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "xhttp",
+                "security": "none",
+                "xhttpSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vless-xhttp"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VLESS_XHTTP_ANTIADS",
+            "listen": "@vless-xhttp-antiads",
+            "protocol": "vless",
+            "settings": {
+                "clients": [],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "xhttp",
+                "security": "none",
+                "xhttpSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vless-xhttp-antiads"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VLESS_XHTTP_ANTIPORN",
+            "listen": "@vless-xhttp-antiporn",
+            "protocol": "vless",
+            "settings": {
+                "clients": [],
+                "decryption": "none"
+            },
+            "streamSettings": {
+                "network": "xhttp",
+                "security": "none",
+                "xhttpSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/vless-xhttp-antiporn"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "VLESSNTLS_FALLBACK",
+            "listen": "0.0.0.0",
+            "port": "80, 8080, 8880, 2052, 2082, 20952082, 2083, 3128, 8080",
+            "protocol": "vless",
+            "settings": {
+                "clients": [],
+                "decryption": "none",
+                "fallbacks": [
+                    {
+                        "dest": "1997",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/trojan-http",
+                        "dest": "@trojan-httpup",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vmess-http",
+                        "dest": "@vmess-httpup",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vless-http",
+                        "dest": "@vless-httpup",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/trojan-antiads",
+                        "dest": "@trojan-ws-antiads",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vmess-antiads",
+                        "dest": "@vmess-ws-antiads",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vless-antiads",
+                        "dest": "@vless-ws-antiads",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/shadowsocks-antiads",
+                        "dest": 6003,
+                        "xver": 2
+                    },
+                    {
+                        "path": "/trojan-hu-antiads",
+                        "dest": "@trojan-hu-antiads",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vmess-hu-antiads",
+                        "dest": "@vmess-hu-antiads",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vless-hu-antiads",
+                        "dest": "@vless-hu-antiads",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/trojan-antiporn",
+                        "dest": "@trojan-ws-antiporn",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vmess-antiporn",
+                        "dest": "@vmess-ws-antiporn",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vless-antiporn",
+                        "dest": "@vless-ws-antiporn",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/shadowsocks-antiporn",
+                        "dest": 6004,
+                        "xver": 2
+                    },
+                    {
+                        "path": "/trojan-hu-antiporn",
+                        "dest": "@trojan-hu-antiporn",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vmess-hu-antiporn",
+                        "dest": "@vmess-hu-antiporn",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vless-hu-antiporn",
+                        "dest": "@vless-hu-antiporn",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/vmess-tcp",
+                        "dest": "@vmess-tcp",
+                        "xver": 2
+                    },
+                    {
+                        "path": "/ss-tcp",
+                        "dest": "6003",
+                        "xver": 2
+                    }
+                ]
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "none"
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "SHADOWSOCKS_TCP",
+            "listen": "127.0.0.1",
+            "port": 4002,
+            "protocol": "shadowsocks",
+            "settings": {
+                "clients": [],
+                "network": "tcp,udp"
+            },
+            "streamSettings": {
+                "network": "tcp",
+                "security": "none",
+                "tcpSettings": {
+                    "header": {
+                        "type": "http",
+                        "request": {
+                            "path": [
+                                "/ss-tcp"
+                            ]
+                        }
+                    }
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "SHADOWSOCKS_WS",
+            "listen": "127.0.0.1",
+            "port": 6002,
+            "protocol": "shadowsocks",
+            "settings": {
+                "clients": [],
+                "network": "tcp,udp"
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "path": "/shadowsocks"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "SHADOWSOCKS_WS_ANTIADS",
+            "listen": "127.0.0.1",
+            "port": 6003,
+            "protocol": "shadowsocks",
+            "settings": {
+                "clients": [],
+                "network": "tcp,udp"
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/shadowsocks-antiads"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "SHADOWSOCKS_WS_ANTIPORN",
+            "listen": "127.0.0.1",
+            "port": 6004,
+            "protocol": "shadowsocks",
+            "settings": {
+                "clients": [],
+                "network": "tcp,udp"
+            },
+            "streamSettings": {
+                "network": "ws",
+                "security": "none",
+                "wsSettings": {
+                    "acceptProxyProtocol": true,
+                    "path": "/shadowsocks-antiporn"
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "SHADOWSOCKS_GRPC",
+            "listen": "127.0.0.1",
+            "port": 6001,
+            "protocol": "shadowsocks",
+            "settings": {
+                "clients": [],
+                "network": "tcp,udp"
+            },
+            "streamSettings": {
+                "network": "grpc",
+                "security": "none",
+                "grpcSettings": {
+                    "acceptProxyProtocol": true,
+                    "serviceName": "shadowsocks-grpc",
+                    "multiMode": true
+                }
+            },
+            "sniffing": {
+                "enabled": true,
+                "destOverride": [
+                    "http",
+                    "tls",
+                    "quic"
+                ]
+            }
+        },
+        {
+            "tag": "SHADOWSOCKS_OUTLINE",
+            "listen": "0.0.0.0",
+            "port": 1080,
+            "protocol": "shadowsocks",
+            "settings": {
+                "clients": [],
+                "network": "tcp,udp"
+            }
+        }
+    ],
+    "outbounds": [
+        {
+            "protocol": "freedom",
+            "settings": {
+                "domainStrategy": "UseIP"
+            },
+            "tag": "direct"
+        },
+        {
+            "tag": "block",
+            "protocol": "blackhole",
+            "settings": {
+                "response": {
+                    "type": "http"
+                }
+            }
+        },
+        {
+            "protocol": "dns",
+            "settings": {
+                "nonIPQuery": "skip"
+            },
+            "tag": "dns-out"
+        },
+        {
+            "tag": "WARP",
+            "protocol": "socks",
+            "settings": {
+                "servers": [
+                    {
+                        "address": "127.0.0.1",
+                        "port": 40000
+                    }
+                ]
+            }
+        },
+        {
+            "protocol": "freedom",
+            "settings": {
+                "domainStrategy": "ForceIPv4"
+            },
+            "proxySettings": {
+                "tag": "WARP"
+            },
+            "tag": "warp-IPv4"
+        },
+        {
+            "protocol": "freedom",
+            "settings": {
+                "domainStrategy": "ForceIPv6"
+            },
+            "proxySettings": {
+                "tag": "WARP"
+            },
+            "tag": "warp-IPv6"
+        }
+    ]
+}
